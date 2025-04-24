@@ -154,7 +154,7 @@ blockquote:is(.is-style-plain) {
 
 /* Image
 ----------------------------------------------------------*/
-.wp-block-image[style*="-radius"]:not([style*="overflow"]) { overflow: hidden; border-radius: 20px; }
+.wp-block-image[style*="-radius"]:not([style*="overflow"]) { overflow: hidden }
 
 /*
  * --------------------------------------------------------
