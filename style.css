@@ -77,8 +77,8 @@ a:active {
 
 .wp-block-navigation .wp-block-navigation-item a:hover,
 .wp-block-navigation .wp-block-navigation-item a:focus {
-	/* text-decoration: underline; */
-	text-decoration-style: solid;
+	text-decoration: underline;
+	/* text-decoration-style: solid; */
 }
 
 /* Don't display the homepage in the Page List block, when located inside a navigation element. */
