@@ -77,7 +77,7 @@ a:active {
 
 .wp-block-navigation .wp-block-navigation-item a:hover,
 .wp-block-navigation .wp-block-navigation-item a:focus {
-	text-decoration: underline;
+	/* text-decoration: underline; */
 	/* text-decoration-style: solid; */
 }
 
