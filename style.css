@@ -83,7 +83,7 @@ a:active {
 
 /* Don't display the homepage in the Page List block, when located inside a navigation element. */
 nav .wp-block-pages-list__item.wp-block-navigation-item.menu-item-home {
-	/* display: none; */
+	display: none;
 }
 
 /*
