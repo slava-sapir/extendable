@@ -226,7 +226,7 @@ function register_portfolio_cpt() {
         'labels' => $labels,
         'public' => true,
         'has_archive' => true,
-        'rewrite' => array('slug' => 'portfolio'),
+        'rewrite' => array('slug' => 'portfolio-archive'),
         'supports' => array('title', 'editor', 'thumbnail', 'excerpt'),
         'show_in_rest' => true, // Allow Gutenberg support
     );
