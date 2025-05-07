@@ -3,7 +3,7 @@ name: Publish Website
 on:
   push:
     branches:
-      - main
+      - liveportfolio
 
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
     - name: 📂 Sync Files
       uses: SamKirkland/web-deploy@v1
       with:
-        target-server: stagingportfolio.dreamhosters.com
+        target-server: myportfolioonline.com
         remote-user: dh_arhf69
         private-ssh-key: ${{ secrets.SSH_KEY }}
-        destination-path: /home/dh_arhf69/stagingportfolio.dreamhosters.com/wp-content/themes/extendable/
+        destination-path: /home/dh_arhf69/myportfolioonline.com/wp-content/themes/extendable/
