@@ -46,6 +46,7 @@ endif;
 
 add_action( 'after_setup_theme', 'extendable_support' );
 
+
 if ( ! function_exists( 'extendable_styles' ) ) :
 
 	/**
@@ -204,3 +205,197 @@ add_action( 'wp_enqueue_scripts', 'extendable_enqueue_dynamic_duotone_css' );
 	return $templates;
 }
 add_filter( 'get_block_templates', 'extendable_exclude_wc_block_templates', 10, 2 );
+
+
+//Creating portfolio Custom post type
+function register_portfolio_cpt() {
+    $labels = array(
+        'name' => 'Portfolio',
+        'singular_name' => 'Portfolio Item',
+        'add_new' => 'Add New',
+        'add_new_item' => 'Add New Portfolio Item',
+        'edit_item' => 'Edit Portfolio Item',
+        'new_item' => 'New Portfolio Item',
+        'view_item' => 'View Portfolio Item',
+        'search_items' => 'Search Portfolio',
+        'not_found' => 'No Portfolio Items found',
+        'not_found_in_trash' => 'No Portfolio Items found in Trash',
+    );
+
+    $args = array(
+        'labels' => $labels,
+        'public' => true,
+        'has_archive' => true,
+        'rewrite' => array('slug' => 'portfolio'),
+        'supports' => array('title', 'editor', 'thumbnail', 'excerpt'),
+        'show_in_rest' => true, // Allow Gutenberg support
+    );
+
+    register_post_type('portfolio', $args);
+}
+add_action('init', 'register_portfolio_cpt');
+
+
+//Load more shortcode
+function render_portfolio_shortcode($args) {
+    $args = array(
+        'post_type' => 'portfolio',
+        'posts_per_page' => 2,
+        'paged' => 1,
+    );
+
+    $query = new WP_Query($args);
+    ob_start();
+    ?>
+
+    <div id="portfolio-grid" class="wp-block-group alignwide">
+        <?php if ($query->have_posts()):
+            while ($query->have_posts()): $query->the_post(); 
+			  get_template_part('template-parts/portfolio-block'); 
+            endwhile; wp_reset_postdata();
+         else: ?>
+            <p>No projects found.</p>
+        <?php endif; ?>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <button id="load-more-portfolio" class="wp-block-button__link">Load More</button>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let currentPage = 3;
+        const loadMoreButton = document.getElementById('load-more-portfolio');
+
+        const spinner = document.createElement('div');
+        spinner.id = 'portfolio-spinner';
+        spinner.style.display = 'none';
+        spinner.style.textAlign = 'center';
+        spinner.style.marginTop = '20px';
+
+        loadMoreButton.parentNode.insertBefore(spinner, loadMoreButton.nextSibling);
+
+        loadMoreButton.addEventListener('click', function() {
+            spinner.style.display = 'block';
+            loadMoreButton.disabled = true;
+			
+			fetch(`<?php echo admin_url('admin-ajax.php'); ?>?action=load_more_portfolio&page=${currentPage}&is_portfolio=1`)
+				.then(response => response.json())
+				.then(result => {
+				spinner.style.display = 'none';
+
+				if (result.success && result.data.html.trim() !== '') {
+				document.getElementById('portfolio-grid').insertAdjacentHTML('beforeend', result.data.html);
+				}
+
+				if (result.data.done) {
+				loadMoreButton.remove();
+				} else {
+				loadMoreButton.disabled = false;
+				}
+				currentPage++;
+			});
+        });
+    });
+    </script>
+
+    <?php
+    return ob_get_clean();
+}
+add_shortcode('portfolio_grid', 'render_portfolio_shortcode');
+
+function load_more_portfolio_ajax() {
+    $paged = isset($_GET['page']) ? intval($_GET['page']) : 1;
+	$is_portfolio = isset($_GET['is_portfolio']) && $_GET['is_portfolio'] == 1;
+
+    $args = array(
+        'post_type' => 'portfolio',
+        'posts_per_page' => 1,
+        'paged' => $paged,
+    );
+
+    $query = new WP_Query($args);
+
+    if ($query->have_posts()):
+        while ($query->have_posts()): $query->the_post();
+          get_template_part('template-parts/portfolio-block');
+        endwhile;
+		$html = ob_get_clean();
+        wp_reset_postdata();
+		
+	else:$html = '';
+    endif;
+
+	$is_last = $paged >= $query->max_num_pages;
+
+	wp_send_json_success([
+		'html' => $html,
+		'done' => $is_last,
+	]);
+
+    die();
+}
+add_action('wp_ajax_load_more_portfolio', 'load_more_portfolio_ajax');
+add_action('wp_ajax_nopriv_load_more_portfolio', 'load_more_portfolio_ajax');
+
+//Register meta field for portfolio external link
+function portfolio_add_meta_box() {
+	add_meta_box(
+		'portfolio_external_link',
+		'External Link',
+		'portfolio_external_link_callback',
+		'portfolio', // your custom post type
+		'side',
+		'default'
+	);
+}
+add_action('add_meta_boxes', 'portfolio_add_meta_box');
+function portfolio_external_link_callback($post) {
+	wp_nonce_field('portfolio_save_meta_box_data', 'portfolio_meta_box_nonce');
+	$value = get_post_meta($post->ID, '_portfolio_external_link', true);
+	echo '<label for="portfolio_external_link">URL</label>';
+	echo '<input type="url" id="portfolio_external_link" name="portfolio_external_link" value="' . esc_attr($value) . '" style="width:100%;" />';
+}
+
+function portfolio_save_meta_box_data($post_id) {
+	if (!isset($_POST['portfolio_meta_box_nonce']) ||
+		!wp_verify_nonce($_POST['portfolio_meta_box_nonce'], 'portfolio_save_meta_box_data')) {
+		return;
+	}
+
+	if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+
+	if (!current_user_can('edit_post', $post_id)) return;
+
+	if (isset($_POST['portfolio_external_link'])) {
+		update_post_meta($post_id, '_portfolio_external_link', sanitize_text_field($_POST['portfolio_external_link']));
+	}
+}
+add_action('save_post', 'portfolio_save_meta_box_data');
+
+function highlight_keywords_in_content($content) {
+	  // Check for normal page view
+	  $is_portfolio_page = is_page('portfolio') || is_page('about');
+
+	  // Check for AJAX request
+	  $is_ajax_portfolio = defined('DOING_AJAX') && DOING_AJAX && (
+       (isset($_GET['is_portfolio']) && $_GET['is_portfolio'] == 1)
+    );
+  
+	  if (!$is_portfolio_page && !$is_ajax_portfolio) {
+		  return $content;
+	  }
+
+    $keywords = ['TypeScript', 'JavaScript', 'Java Spring Boot', 'JQuery', 'custom CSS', 'CI/CD', 'Git', 'AWS','WordPress', 'API', 'Bootstrap', 'React', 'Tailwind'];
+	
+    foreach ($keywords as $word) {
+        $pattern = '/\b(' . preg_quote($word, '/') . ')\b/i';
+        $replacement = '<span class="highlight-word">$1</span>';
+        $content = preg_replace($pattern, $replacement, $content);
+    }
+
+    return $content;
+}
+add_filter('the_content', 'highlight_keywords_in_content', 20);
+
+
