@@ -316,12 +316,13 @@ function load_more_portfolio_ajax() {
 
     $query = new WP_Query($args);
 
+	ob_start();
     if ($query->have_posts()):
         while ($query->have_posts()): $query->the_post();
           get_template_part('template-parts/portfolio-block');
         endwhile;
 		$html = ob_get_clean();
-        wp_reset_postdata();
+    wp_reset_postdata();
 		
 	else:$html = '';
     endif;
