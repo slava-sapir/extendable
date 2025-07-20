@@ -400,3 +400,11 @@ function highlight_keywords_in_content($content) {
 add_filter('the_content', 'highlight_keywords_in_content', 20);
 
 
+// Add 'portfolio' CPT to the REST API if not already visible
+// add_action('init', function() {
+//     global $wp_post_types;
+//     if (isset($wp_post_types['portfolio'])) {
+//         $wp_post_types['portfolio']->show_in_rest = true;
+//     }
+// });
+

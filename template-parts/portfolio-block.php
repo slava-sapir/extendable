@@ -7,7 +7,6 @@
 <a href="<?php echo esc_url($final_link); ?>" style="color:inherit;text-decoration:none;" target="_blank" rel="noopener noreferrer">
     <div class="wp-block-cover alignwide extendify-image-import" style="border-radius:5px;padding:var(--wp--preset--spacing--80);margin-bottom:var(--wp--preset--spacing--30);min-height:50vh;">
         <?php if ($featured_img_url): ?>
-        
             <img class="wp-block-cover__image-background" src="<?php echo esc_url($featured_img_url); ?>" alt="<?php the_title_attribute(); ?>" data-object-fit="cover" />
         <?php endif; ?>
         <span aria-hidden="true" class="wp-block-cover__background has-black-background-color has-background-dim-60 has-background-dim"></span>
