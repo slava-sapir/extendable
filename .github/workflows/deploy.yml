@@ -18,7 +18,7 @@ jobs:
     - name: 📂 Sync Files
       uses: SamKirkland/web-deploy@v1
       with:
-        target-server: staging.myportfolioonline.com
+        target-server: myportfolioonline.com
         remote-user: dh_arhf69
         private-ssh-key: ${{ secrets.SSH_KEY }}
-        destination-path: /home/dh_arhf69/staging.myportfolioonline.com/wp-content/themes/extendable/
+        destination-path: /home/dh_arhf69/myportfolioonline.com/wp-content/themes/extendable/
