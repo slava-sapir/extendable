@@ -387,7 +387,7 @@ function highlight_keywords_in_content($content) {
 		  return $content;
 	  }
 
-    $keywords = ['TypeScript', 'JavaScript', 'Java Spring Boot', 'JQuery', 'MongoDB', 'Node.js', 'Context', 'custom CSS', 'CI/CD', 'Git', 'AWS','WordPress', 'API', 'Bootstrap', 'React', 'Tailwind'];
+    $keywords = ['TypeScript', 'JavaScript', 'Java Spring Boot', 'JQuery', 'MongoDB', 'Node.js', 'Context', 'custom CSS', 'CI/CD', 'Git', 'AWS','WordPress', 'REST API', 'API', 'Bootstrap', 'React', 'Tailwind'];
 	
     foreach ($keywords as $word) {
         $pattern = '/\b(' . preg_quote($word, '/') . ')\b/i';

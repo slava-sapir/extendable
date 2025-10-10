@@ -17,6 +17,7 @@ jobs:
     - name: 📂 Sync Files
       uses: SamKirkland/web-deploy@v1
       with:
+        source-path: .
         target-server: myportfolioonline.com
         remote-user: dh_arhf69
         private-ssh-key: ${{ secrets.SSH_KEY }}
