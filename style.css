@@ -294,18 +294,94 @@ input, textarea {
 	display: inline-block;
   }
 
+	/* 3D Card hover effect */
+	.card3d { 
+	perspective: 1200px; 
+	display:inline-block; 
+    }
+	.card3d img{
+	filter: grayscale(40%) contrast(1) saturate(1);
+	transform: translateZ(0);
+	transition: filter .6s ease, transform .6s ease, box-shadow .6s;
+	box-shadow: 0 10px 25px rgba(0,0,0,.15);
+	border-radius: 16px; display:block;
+	}
+	.card3d:hover img{
+	transform: rotateY(15deg) rotateX(-4deg) translateY(-6px) scale(1.03);
+	filter: grayscale(0) saturate(1.1) hue-rotate(325deg) contrast(1.05);
+	box-shadow: 0 10px 20px rgba(244, 240, 240, 0.436);
+	}
+	@media (prefers-reduced-motion: reduce){
+	.card3d img, .card3d:hover img { transition: none; transform:none; }
+	}
+
+    /* Polaroid hover effect */
+	.polaroid { 
+	perspective: 1200px;
+	display:inline-block; background:#fff; padding:12px 12px 28px; border-radius:8px;
+	box-shadow: 0 12px 30px rgba(0,0,0,.15); transform: rotate(-2deg);
+	transition: transform .4s ease, box-shadow .4s ease;
+	}
+	.polaroid img{ display:block; border-radius:6px; }
+	.polaroid:hover{
+	transform: rotate(0deg) translateY(-6px);
+	box-shadow: 0 24px 60px rgba(0,0,0,.25);
+	}
+
+	 /* Pulse hover effect */
+	.pulse {
+	overflow: hidden;
+	border-radius: 16px;
+	display: inline-block;
+	}
+
+	.pulse img{
+	display: block;
+	width: 100%;
+	height: auto;
+	transform-origin: 60% 40%;
+	transform: scale(1) translate(0, 0);
+	transition-property: transform;
+	transition-timing-function: ease-in-out;
+	transition-duration: var(--ken-out, 10s);
+	will-change: transform;
+	}
+
+	.pulse:hover img{
+	transform: scale(1.18) translate(-2%, -2%);
+	transition-duration: var(--ken-in, 5s);
+	}
+
+	@media (max-width: 640px){
+	.pulse:hover img{
+		transform: scale(1.12) translate(-1%, -1%);
+	}
+	}
+
+	@media (prefers-reduced-motion: reduce){
+	.pulse img{
+		transition: none !important;
+		transform: none !important;
+	}
+	}
+
+
   /* Target images inside the Extendify figure block */
+  figure.extendify-image-import {
+	 perspective: 1200px; display:inline-block;
+  }
+
   figure.extendify-image-import img {
 	transition: transform 0.3s ease, box-shadow 0.3s ease;
 	cursor: pointer;
   }
-  
+
   /* On hover, zoom slightly and add shadow */
   figure.extendify-image-import:hover img {
 	transform: scale(1.05);
 	box-shadow: 0 10px 20px rgba(244, 240, 240, 0.436);
   }
-
+   
 .wp-block-cb-carousel .slick-next:before, 
 .wp-block-cb-carousel .slick-prev:before,
 .slick-dots li.slick-active button:before,
