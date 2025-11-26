@@ -1,0 +1,23 @@
+name: Publish Website (Staging)
+
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  web-deploy:
+    name: 🚀 Deploy Website Every Commit (Staging)
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Get Latest Code
+        uses: actions/checkout@v3
+
+      - name: 📂 Sync Files
+        uses: SamKirkland/web-deploy@v1
+        with:
+          source-path: .
+          target-server: staging.myportfolioonline.com
+          remote-user: dh_arhf69
+          private-ssh-key: ${{ secrets.SSH_KEY }}
+          destination-path: /home/dh_arhf69/staging.myportfolioonline.com/wp-content/themes/extendable/

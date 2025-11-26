@@ -3,8 +3,7 @@ name: Publish Website
 on:
   push:
     branches:
-      - staging
-
+      - main
 
 
 jobs:
@@ -19,7 +18,11 @@ jobs:
       uses: SamKirkland/web-deploy@v1
       with:
         source-path: .
+<<<<<<< HEAD:.github/workflows/deploy.yml
         target-server: staging.myportfolioonline.com
+=======
+        target-server: myportfolioonline.com
+>>>>>>> main:.github/workflows/deploy-main.yml
         remote-user: dh_arhf69
         private-ssh-key: ${{ secrets.SSH_KEY }}
-        destination-path: /home/dh_arhf69/staging.myportfolioonline.com/wp-content/themes/extendable/
+        destination-path: /home/dh_arhf69/myportfolioonline.com/wp-content/themes/extendable/
