@@ -419,13 +419,13 @@ function highlight_keywords_in_content( $content ) {
   $keywords = array(
     'Java Spring Boot','TypeScript','JavaScript','Node.js','MongoDB', 'Custom Post Types',
     'React','Tailwind','Bootstrap','WordPress','REST API','API', 'taxonomies',
-    'CI/CD','Git','AWS','JQuery','Context','custom CSS', 'CSS', 'ACF'
+    'CI/CD','Git','AWS','JQuery','Context','custom CSS', 'CSS', 'ACF', 'Next.js 15', 
+	'Vercel AI SDK', 'PostgreSQL (Neon)', 'OpenAI (GPT-4 Turbo)'
   );
-   usort( $keywords, function( $a, $b ) { return mb_strlen( $b ) - mb_strlen( $a ); } );
 
+  usort( $keywords, function( $a, $b ) { return mb_strlen( $b ) - mb_strlen( $a ); } );
   $quoted  = array_map( function( $w ) { return preg_quote( $w, '/' ); }, $keywords );
   $pattern = '/(?<![A-Za-z0-9+#.\-])(' . implode( '|', $quoted ) . ')(?![A-Za-z0-9+#.\-])/i';
-
   $replacement = '<span class="highlight-word">$1</span>';
   $content = preg_replace( $pattern, $replacement, $content );
 
