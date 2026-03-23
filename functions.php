@@ -237,35 +237,43 @@ add_action('init', 'register_portfolio_cpt');
 
 
 //Load more shortcode
-function render_portfolio_shortcode($args) {
-    $args = array(
-        'post_type' => 'portfolio',
-        'posts_per_page' => 2,
-        'paged' => 1,
-    );
 
-    $query = new WP_Query($args);
+function render_portfolio_shortcode() {
+    $posts_per_page = 2;
+
+    $query = new WP_Query( array(
+        'post_type'      => 'portfolio',
+        'posts_per_page' => $posts_per_page,
+        'paged'          => 1,
+    ) );
+
     ob_start();
     ?>
-
     <div id="portfolio-grid" class="wp-block-group alignwide">
-        <?php if ($query->have_posts()):
-            while ($query->have_posts()): $query->the_post(); 
-			  get_template_part('template-parts/portfolio-block'); 
-            endwhile; wp_reset_postdata();
-         else: ?>
+        <?php if ( $query->have_posts() ) : ?>
+            <?php while ( $query->have_posts() ) : $query->the_post(); ?>
+                <?php get_template_part( 'template-parts/portfolio-block' ); ?>
+            <?php endwhile; ?>
+            <?php wp_reset_postdata(); ?>
+        <?php else : ?>
             <p>No projects found.</p>
         <?php endif; ?>
     </div>
 
-    <div style="text-align: center; margin-top: 20px;">
-        <button id="load-more-portfolio" class="wp-block-button__link">Load More</button>
-    </div>
+    <?php if ( $query->max_num_pages > 1 ) : ?>
+        <div style="text-align:center; margin-top:20px;">
+            <button id="load-more-portfolio" class="wp-block-button__link" type="button">Load More</button>
+        </div>
+    <?php endif; ?>
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        let currentPage = 3;
+        const portfolioGrid = document.getElementById('portfolio-grid');
         const loadMoreButton = document.getElementById('load-more-portfolio');
+
+        if (!portfolioGrid || !loadMoreButton) return;
+
+        let currentPage = 3;
 
         const spinner = document.createElement('div');
         spinner.id = 'portfolio-spinner';
@@ -278,66 +286,71 @@ function render_portfolio_shortcode($args) {
         loadMoreButton.addEventListener('click', function() {
             spinner.style.display = 'block';
             loadMoreButton.disabled = true;
-			
-			fetch(`<?php echo admin_url('admin-ajax.php'); ?>?action=load_more_portfolio&page=${currentPage}&is_portfolio=1`)
-				.then(response => response.json())
-				.then(result => {
-				spinner.style.display = 'none';
 
-				if (result.success && result.data.html.trim() !== '') {
-				document.getElementById('portfolio-grid').insertAdjacentHTML('beforeend', result.data.html);
-				}
+            fetch(`<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>?action=load_more_portfolio&page=${currentPage}&is_portfolio=1`)
+                .then(response => response.json())
+                .then(result => {
+                    spinner.style.display = 'none';
 
-				if (result.data.done) {
-				loadMoreButton.remove();
-				} else {
-				loadMoreButton.disabled = false;
-				}
-				currentPage++;
-			});
+                    if (result.success && result.data.html && result.data.html.trim() !== '') {
+                        portfolioGrid.insertAdjacentHTML('beforeend', result.data.html);
+                    }
+
+                    if (result.data.done) {
+                        loadMoreButton.remove();
+                        spinner.remove();
+                    } else {
+                        loadMoreButton.disabled = false;
+                        currentPage++;
+                    }
+                })
+                .catch(error => {
+                    console.error('Load more error:', error);
+                    spinner.style.display = 'none';
+                    loadMoreButton.disabled = false;
+                });
         });
     });
     </script>
-
     <?php
+
     return ob_get_clean();
 }
-add_shortcode('portfolio_grid', 'render_portfolio_shortcode');
+add_shortcode( 'portfolio_grid', 'render_portfolio_shortcode' );
+
+
 
 function load_more_portfolio_ajax() {
-    $paged = isset($_GET['page']) ? intval($_GET['page']) : 1;
-	$is_portfolio = isset($_GET['is_portfolio']) && $_GET['is_portfolio'] == 1;
+    $paged = isset( $_GET['page'] ) ? max( 1, intval( $_GET['page'] ) ) : 1;
+    $posts_per_page = 1;
 
-    $args = array(
-        'post_type' => 'portfolio',
-        'posts_per_page' => 1,
-        'paged' => $paged,
-    );
+    $query = new WP_Query( array(
+        'post_type'      => 'portfolio',
+        'posts_per_page' => $posts_per_page,
+        'paged'          => $paged,
+    ) );
 
-    $query = new WP_Query($args);
+    ob_start();
 
-	ob_start();
-    if ($query->have_posts()):
-        while ($query->have_posts()): $query->the_post();
-          get_template_part('template-parts/portfolio-block');
-        endwhile;
-		$html = ob_get_clean();
+    if ( $query->have_posts() ) {
+        while ( $query->have_posts() ) {
+            $query->the_post();
+            get_template_part( 'template-parts/portfolio-block' );
+        }
+    }
+
+    $html = ob_get_clean();
     wp_reset_postdata();
-		
-	else:$html = '';
-    endif;
 
-	$is_last = $paged >= $query->max_num_pages;
+    $is_last = $paged >= $query->max_num_pages;
 
-	wp_send_json_success([
-		'html' => $html,
-		'done' => $is_last,
-	]);
-
-    die();
+    wp_send_json_success( array(
+        'html' => $html,
+        'done' => $is_last,
+    ) );
 }
-add_action('wp_ajax_load_more_portfolio', 'load_more_portfolio_ajax');
-add_action('wp_ajax_nopriv_load_more_portfolio', 'load_more_portfolio_ajax');
+add_action( 'wp_ajax_load_more_portfolio', 'load_more_portfolio_ajax' );
+add_action( 'wp_ajax_nopriv_load_more_portfolio', 'load_more_portfolio_ajax' );
 
 //Register meta field for portfolio external link
 function portfolio_add_meta_box() {
