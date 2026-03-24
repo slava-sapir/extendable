@@ -387,32 +387,6 @@ function portfolio_save_meta_box_data($post_id) {
 }
 add_action('save_post', 'portfolio_save_meta_box_data');
 
-// function highlight_keywords_in_content($content) {
-// 	  // Check for normal page view
-// 	  $is_portfolio_page = is_page('portfolio') || is_page('about');
-
-// 	  // Check for AJAX request
-// 	  $is_ajax_portfolio = defined('DOING_AJAX') && DOING_AJAX && (
-//        (isset($_GET['is_portfolio']) && $_GET['is_portfolio'] == 1)
-//     );
-  
-// 	  if (!$is_portfolio_page && !$is_ajax_portfolio) {
-// 		  return $content;
-// 	  }
-
-//     $keywords = ['TypeScript', 'JavaScript', 'Java Spring Boot', 'JQuery', 'MongoDB', 
-// 	'Node.js', 'Context', 'CSS', 'CI/CD', 'Git', 'AWS','WordPress', 
-// 	'REST API', 'API', 'Bootstrap', 'React', 'Tailwind', 'ACF', 'Custom Post Types', 'taxonomies'];
-	
-//     foreach ($keywords as $word) {
-//         $pattern = '/\b(' . preg_quote($word, '/') . ')\b/i';
-//         $replacement = '<span class="highlight-word">$1</span>';
-//         $content = preg_replace($pattern, $replacement, $content);
-//     }
-
-//     return $content;
-// }
-// add_filter('the_content', 'highlight_keywords_in_content', 20);
 
 /**
  * This function is hooked into the_content to highlight my tech stack terms I used in specific projects
