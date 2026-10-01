@@ -404,3 +404,67 @@ input, textarea {
 span .cb-pagination-bullet .swiper-pagination-bullet .swiper-pagination-bullet-active {
 	background: #fff!important;
 }
+
+/* Responsive portfolio and call-to-action layout
+----------------------------------------------------------*/
+@media (max-width: 782px) {
+	.wp-site-blocks,
+	.wp-site-blocks main {
+		max-width: 100%;
+	}
+
+	#portfolio-grid,
+	#portfolio-featured-grid,
+	.wp-block-cb-carousel,
+	.wp-block-cb-carousel .slick-slider,
+	.wp-block-cb-carousel .slick-list,
+	.wp-block-cb-carousel .slick-track,
+	.wp-block-columns > .wp-block-column {
+		max-width: 100%;
+		min-width: 0;
+	}
+
+	#portfolio-grid .wp-block-cover,
+	#portfolio-featured-grid .wp-block-cover {
+		min-height: auto !important;
+		padding: clamp(1.5rem, 7vw, 2.5rem) !important;
+	}
+
+	#portfolio-grid .wp-block-cover__inner-container,
+	#portfolio-featured-grid .wp-block-cover__inner-container,
+	.portfolio-content {
+		min-width: 0;
+		width: 100%;
+	}
+
+	.portfolio-content,
+	.portfolio-content p,
+	.portfolio-content h3,
+	.portfolio-content h4 {
+		overflow-wrap: anywhere;
+	}
+
+	main .wp-block-buttons {
+		gap: 0.75rem;
+	}
+
+	main .wp-block-buttons > .wp-block-button,
+	main .wp-block-buttons .wp-block-button__link {
+		width: 100%;
+	}
+
+	main .wp-block-buttons .wp-block-button__link {
+		text-align: center;
+	}
+
+	.polaroid {
+		box-sizing: border-box;
+		max-width: 100%;
+		transform: none;
+	}
+
+	.polaroid img {
+		height: auto;
+		max-width: 100%;
+	}
+}
