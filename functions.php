@@ -238,11 +238,26 @@ add_action('init', 'register_portfolio_cpt');
 
 //Load more shortcode
 
+/**
+ * Projects selected for the public portfolio, in display order.
+ *
+ * Historical and experimental projects remain available in WordPress but are
+ * intentionally excluded from the public grid.
+ *
+ * @return int[]
+ */
+function extendable_public_portfolio_ids() {
+    return array( 112, 199, 113, 197, 193, 143, 864 );
+}
+
 function render_portfolio_shortcode() {
     $posts_per_page = 2;
 
     $query = new WP_Query( array(
         'post_type'      => 'portfolio',
+        'post_status'    => 'publish',
+        'post__in'       => extendable_public_portfolio_ids(),
+        'orderby'        => 'post__in',
         'posts_per_page' => $posts_per_page,
         'paged'          => 1,
     ) );
@@ -326,6 +341,9 @@ function load_more_portfolio_ajax() {
 
     $query = new WP_Query( array(
         'post_type'      => 'portfolio',
+        'post_status'    => 'publish',
+        'post__in'       => extendable_public_portfolio_ids(),
+        'orderby'        => 'post__in',
         'posts_per_page' => $posts_per_page,
         'paged'          => $paged,
     ) );
