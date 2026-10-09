@@ -1,38 +1,78 @@
 <?php
-$featured_img_url = get_the_post_thumbnail_url( get_the_ID(), 'full' );
-$link            = get_post_meta( get_the_ID(), '_portfolio_external_link', true );
-$final_link      = $link ? esc_url( $link ) : get_permalink();
+$featured_image_id = get_post_thumbnail_id( get_the_ID() );
+$final_link        = get_permalink();
+$project_text      = wp_strip_all_tags( get_the_title() . ' ' . get_the_excerpt() . ' ' . strip_shortcodes( get_the_content() ) );
+$summary_source    = wp_strip_all_tags( strip_shortcodes( get_the_content() ) );
+$summary_parts     = preg_split( '/\b(?:Project Overview|Overview|The Challenge)\b/i', $summary_source );
+$summary           = wp_trim_words( trim( $summary_parts[0] ?? $summary_source ), 30, '&hellip;' );
+$project_title     = get_the_title();
+$project_type      = ( false !== stripos( $project_title, 'Netflix' ) || false !== stripos( $project_title, 'Flash Cards' ) )
+	? 'Independent Project'
+	: 'Production Website';
+$technology_terms  = array(
+	'WordPress'    => 'WordPress',
+	'WooCommerce'  => 'WooCommerce',
+	'ACF'          => 'ACF',
+	'Gutenberg'    => 'Gutenberg',
+	'Next.js'      => 'Next.js',
+	'React'        => 'React',
+	'TypeScript'   => 'TypeScript',
+	'JavaScript'   => 'JavaScript',
+	'Tailwind'     => 'Tailwind CSS',
+	'Bootstrap'    => 'Bootstrap',
+	'OpenAI'       => 'OpenAI',
+	'PHP'          => 'PHP',
+);
+$technologies      = array();
+
+foreach ( $technology_terms as $search_term => $label ) {
+	if ( false !== stripos( $project_text, $search_term ) ) {
+		$technologies[] = $label;
+	}
+
+	if ( 3 === count( $technologies ) ) {
+		break;
+	}
+}
+
+if ( empty( $technologies ) ) {
+	$technologies = array( 'Responsive UI', 'Custom Development' );
+}
 ?>
 
-<div class="wp-block-cover alignwide extendify-image-import" style="border-radius:5px;padding:var(--wp--preset--spacing--80);margin-bottom:var(--wp--preset--spacing--30);min-height:50vh;position:relative;">
-	<?php if ( $featured_img_url ) : ?>
-		<img
-			class="wp-block-cover__image-background"
-			src="<?php echo esc_url( $featured_img_url ); ?>"
-			alt="<?php the_title_attribute(); ?>"
-			data-object-fit="cover"
-		/>
-	<?php endif; ?>
-
-	<span aria-hidden="true" class="wp-block-cover__background has-black-background-color has-background-dim-60 has-background-dim"></span>
-
-	<div class="wp-block-cover__inner-container is-layout-flow wp-block-cover-is-layout-flow">
-		<div class="wp-block-group is-vertical is-layout-flex wp-block-group-is-layout-flex">
-			<div class="wp-block-group has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
-				<h4 class="wp-block-heading has-white-color has-text-color has-small-font-size" style="margin-top:24px;font-style:normal;font-weight:400">
-					<?php echo esc_html( get_the_excerpt() ); ?>
-				</h4>
-
-				<h3 class="wp-block-heading has-white-color has-text-color has-large-font-size" style="margin-top:12px">
-					<a href="<?php echo esc_url( $final_link ); ?>" style="color:inherit;text-decoration:none;" target="_blank" rel="noopener noreferrer">
-						<?php the_title(); ?>
-					</a>
-				</h3>
-
-				<div class="portfolio-content">
-					<?php echo apply_filters( 'the_content', get_the_content() ); ?>
-				</div>
-			</div>
-		</div>
+<article class="portfolio-card">
+	<div class="portfolio-card__media">
+		<?php if ( $featured_image_id ) : ?>
+			<?php
+			echo wp_get_attachment_image(
+				$featured_image_id,
+				'large',
+				false,
+				array(
+					'class'    => 'portfolio-card__image',
+					'alt'      => $project_title,
+					'loading'  => 'lazy',
+					'decoding' => 'async',
+					'sizes'    => '(max-width: 782px) calc(100vw - 2.5rem), (max-width: 1200px) 50vw, 560px',
+				)
+			);
+			?>
+		<?php endif; ?>
 	</div>
-</div>
+
+	<div class="portfolio-card__body">
+		<p class="portfolio-card__type"><?php echo esc_html( $project_type ); ?></p>
+		<h3 class="portfolio-card__title"><?php echo esc_html( $project_title ); ?></h3>
+
+		<ul class="portfolio-card__technologies" aria-label="Technologies used">
+			<?php foreach ( $technologies as $technology ) : ?>
+				<li><?php echo esc_html( $technology ); ?></li>
+			<?php endforeach; ?>
+		</ul>
+
+		<p class="portfolio-card__summary"><?php echo wp_kses_post( $summary ); ?></p>
+		<a class="portfolio-card__link" href="<?php echo esc_url( $final_link ); ?>">
+			View case study <span class="portfolio-card__arrow" aria-hidden="true">&rarr;</span>
+		</a>
+	</div>
+</article>

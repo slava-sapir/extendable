@@ -405,6 +405,277 @@ span .cb-pagination-bullet .swiper-pagination-bullet .swiper-pagination-bullet-a
 	background: #fff!important;
 }
 
+/* Modern portfolio typography: clean body copy with confident display headings. */
+body,
+button,
+input,
+select,
+textarea,
+.wp-block-button__link,
+.wp-block-navigation,
+.wp-block-post-excerpt,
+.wp-block-post-content {
+	font-family: var(--wp--preset--font-family--inter), Arial, sans-serif !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.wp-block-heading,
+.wp-block-post-title,
+.wp-block-site-title {
+	font-family: var(--wp--preset--font-family--manrope), Arial, sans-serif !important;
+	letter-spacing: -0.025em;
+}
+
+/* Portfolio case studies
+----------------------------------------------------------*/
+.single-portfolio .wp-block-post-title {
+	text-wrap: balance;
+}
+
+.single-portfolio .wp-block-post-content {
+	max-width: 880px;
+}
+
+.single-portfolio .wp-block-post-content > p:first-child {
+	position: relative;
+	padding: clamp(1.25rem, 3vw, 2rem);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	border-left: 6px solid var(--color-accent);
+	border-radius: 18px;
+	background: linear-gradient(135deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.04));
+	box-shadow: 0 18px 45px rgba(0, 0, 0, 0.16);
+	font-size: clamp(1.1rem, 2vw, 1.35rem);
+	line-height: 1.65;
+}
+
+.single-portfolio .wp-block-post-content > h2 {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	margin-top: clamp(2.5rem, 7vw, 4.5rem);
+	text-wrap: balance;
+}
+
+.single-portfolio .wp-block-post-content > h2::before {
+	content: "";
+	flex: 0 0 2.25rem;
+	height: 0.35rem;
+	border-radius: 999px;
+	background: linear-gradient(90deg, var(--color-accent), #ffd166);
+	box-shadow: 0 0 20px rgba(255, 124, 93, 0.5);
+}
+
+.single-portfolio .wp-block-post-content > h2 + p,
+.single-portfolio .wp-block-post-content > h2 + ul {
+	padding: clamp(1.25rem, 3vw, 2rem);
+	border: 1px solid rgba(255, 255, 255, 0.14);
+	border-radius: 18px;
+	background: rgba(255, 255, 255, 0.07);
+	box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+	transition: transform 220ms ease, border-color 220ms ease, background-color 220ms ease;
+}
+
+.single-portfolio .wp-block-post-content > h2 + p:hover,
+.single-portfolio .wp-block-post-content > h2 + ul:hover {
+	transform: translateY(-4px);
+	border-color: var(--color-accent);
+	background: rgba(255, 255, 255, 0.11);
+}
+
+.single-portfolio .wp-block-post-content li {
+	margin-block: 0.55rem;
+}
+
+.single-portfolio .wp-block-post-content li::marker {
+	color: var(--color-accent);
+}
+
+.single-portfolio .portfolio-case-study-actions {
+	display: flex !important;
+	flex-wrap: wrap;
+	align-items: stretch;
+	gap: 1rem !important;
+	margin-top: clamp(2rem, 5vw, 3.5rem);
+}
+
+.single-portfolio .portfolio-case-study-actions > .wp-block-button {
+	flex: 0 1 auto;
+	margin: 0 !important;
+}
+
+.single-portfolio .portfolio-case-study-actions .wp-block-button__link {
+	box-sizing: border-box;
+	min-width: 190px;
+	text-align: center;
+	transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.single-portfolio .portfolio-case-study-actions .wp-block-button__link:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+}
+
+.single-portfolio .portfolio-case-study-actions .is-style-outline .wp-block-button__link:hover,
+.single-portfolio .portfolio-case-study-actions .is-style-outline .wp-block-button__link:focus-visible {
+	border-color: var(--color-accent) !important;
+	background-color: var(--color-accent) !important;
+	color: #111 !important;
+}
+
+/* Portfolio project cards
+----------------------------------------------------------*/
+#portfolio-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	grid-auto-rows: 1fr;
+	gap: clamp(1.25rem, 3vw, 2rem);
+}
+
+#portfolio-grid .portfolio-card,
+#portfolio-featured-grid .portfolio-card {
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	height: 100%;
+	margin: 0 !important;
+	overflow: hidden;
+	border: 1px solid rgba(255, 224, 102, 0.18);
+	border-radius: 20px !important;
+	background: linear-gradient(150deg, #27434b 0%, #173039 100%);
+	box-shadow: 0 18px 45px rgba(9, 25, 31, 0.2);
+	transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+}
+
+#portfolio-grid .portfolio-card:hover,
+#portfolio-grid .portfolio-card:focus-within,
+#portfolio-featured-grid .portfolio-card:hover,
+#portfolio-featured-grid .portfolio-card:focus-within {
+	transform: translateY(-6px);
+	border-color: var(--color-accent);
+	box-shadow: 0 24px 55px rgba(9, 25, 31, 0.32);
+}
+
+.portfolio-card__media {
+	position: relative;
+	overflow: hidden;
+	aspect-ratio: 16 / 10;
+	background: #dbe8e3;
+}
+
+.portfolio-card__media::after {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(180deg, transparent 60%, rgba(9, 25, 31, 0.28));
+	content: "";
+	pointer-events: none;
+}
+
+.portfolio-card__image {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 360ms ease;
+}
+
+.portfolio-card:hover .portfolio-card__image,
+.portfolio-card:focus-within .portfolio-card__image {
+	transform: scale(1.055);
+}
+
+.portfolio-card__body {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	align-items: flex-start;
+	padding: clamp(1.25rem, 2.6vw, 1.75rem);
+	color: #fff;
+}
+
+.portfolio-card__type {
+	margin: 0 0 0.9rem;
+	padding: 0.36rem 0.7rem;
+	border: 1px solid rgba(255, 224, 102, 0.45);
+	border-radius: 999px;
+	background: rgba(255, 224, 102, 0.12);
+	color: var(--color-accent);
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.07em;
+	line-height: 1.2;
+	text-transform: uppercase;
+}
+
+.portfolio-card__title {
+	margin: 0;
+	color: #fff;
+	font-size: clamp(1.45rem, 2.8vw, 2rem);
+	line-height: 1.15;
+	text-wrap: balance;
+}
+
+.portfolio-card__technologies {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.45rem;
+	margin: 1rem 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.portfolio-card__technologies li {
+	padding: 0.3rem 0.62rem;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.1);
+	color: rgba(255, 255, 255, 0.88);
+	font-size: 0.76rem;
+	font-weight: 600;
+	line-height: 1.25;
+}
+
+.portfolio-card__summary {
+	margin: 1rem 0 1.25rem;
+	color: rgba(255, 255, 255, 0.82);
+	line-height: 1.6;
+}
+
+.portfolio-card__link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.45rem;
+	margin-top: auto;
+	padding: 0.62rem 0.95rem;
+	border-radius: 999px;
+	background: var(--color-accent);
+	color: #173039;
+	font-weight: 700;
+	font-size: 0.88rem;
+	line-height: 1.2;
+	text-decoration: none;
+	transition: background-color 180ms ease, box-shadow 180ms ease, color 180ms ease;
+}
+
+.portfolio-card__link:hover,
+.portfolio-card__link:focus-visible {
+	background: #ffe98f;
+	color: #173039;
+	box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24);
+}
+
+.portfolio-card__arrow {
+	transition: transform 180ms ease;
+}
+
+.portfolio-card__link:hover .portfolio-card__arrow,
+.portfolio-card__link:focus-visible .portfolio-card__arrow {
+	transform: translateX(4px);
+}
+
 /* Responsive portfolio and call-to-action layout
 ----------------------------------------------------------*/
 @media (max-width: 782px) {
@@ -424,23 +695,14 @@ span .cb-pagination-bullet .swiper-pagination-bullet .swiper-pagination-bullet-a
 		min-width: 0;
 	}
 
-	#portfolio-grid .wp-block-cover,
-	#portfolio-featured-grid .wp-block-cover {
-		min-height: auto !important;
-		padding: clamp(1.5rem, 7vw, 2.5rem) !important;
+	#portfolio-grid {
+		grid-template-columns: 1fr;
+		gap: 1.25rem;
 	}
 
-	#portfolio-grid .wp-block-cover__inner-container,
-	#portfolio-featured-grid .wp-block-cover__inner-container,
-	.portfolio-content {
-		min-width: 0;
-		width: 100%;
-	}
-
-	.portfolio-content,
-	.portfolio-content p,
-	.portfolio-content h3,
-	.portfolio-content h4 {
+	.portfolio-card__body,
+	.portfolio-card__summary,
+	.portfolio-card__title {
 		overflow-wrap: anywhere;
 	}
 
@@ -457,13 +719,76 @@ span .cb-pagination-bullet .swiper-pagination-bullet .swiper-pagination-bullet-a
 		text-align: center;
 	}
 
+	.single-portfolio .wp-block-post-content > h2 {
+		align-items: flex-start;
+		font-size: clamp(1.75rem, 9vw, 2.5rem);
+	}
+
+	.single-portfolio .portfolio-case-study-actions > .wp-block-button,
+	.single-portfolio .portfolio-case-study-actions .wp-block-button__link {
+		width: 100%;
+	}
+
+	.single-portfolio .portfolio-case-study-actions {
+		flex-direction: column;
+	}
+
+	.single-portfolio .portfolio-case-study-actions > .wp-block-button {
+		display: flex;
+		flex: 0 0 auto;
+	}
+
+	.single-portfolio .portfolio-case-study-actions .wp-block-button__link {
+		display: block;
+		flex: 1 1 auto;
+	}
+
 	.wp-block-cb-carousel .slick-prev {
-		left: 0;
-		z-index: 2;
+		display: none !important;
 	}
 
 	.wp-block-cb-carousel .slick-next {
-		right: 0;
+		display: none !important;
+	}
+
+	.wp-block-cb-carousel {
+		box-sizing: border-box;
+		width: 100%;
+		padding-bottom: 2.5rem;
+		overflow: hidden;
+	}
+
+	.wp-block-cb-carousel .slick-list {
+		box-sizing: border-box;
+		width: 100%;
+		overflow: hidden;
+	}
+
+	.wp-block-cb-carousel .slick-track {
+		display: flex;
+		align-items: stretch;
+	}
+
+	.wp-block-cb-carousel .slick-slide {
+		box-sizing: border-box;
+		min-width: 0;
+		height: auto;
+		padding: 0 0.35rem;
+	}
+
+	.wp-block-cb-carousel .slick-slide > div,
+	.wp-block-cb-carousel .wp-block-cb-slide,
+	.wp-block-cb-carousel .wp-block-cb-slide > .wp-block-group {
+		box-sizing: border-box;
+		height: 100%;
+	}
+
+	.wp-block-cb-carousel .slick-dots {
+		bottom: 0;
+	}
+
+	.wp-block-cb-carousel .slick-dots li {
+		margin: 0 2px;
 	}
 
 	.polaroid {
@@ -475,5 +800,510 @@ span .cb-pagination-bullet .swiper-pagination-bullet .swiper-pagination-bullet-a
 	.polaroid img {
 		height: auto;
 		max-width: 100%;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.single-portfolio .wp-block-post-content > h2 + p,
+	.single-portfolio .wp-block-post-content > h2 + ul,
+	.single-portfolio .portfolio-case-study-actions .wp-block-button__link,
+	#portfolio-grid .portfolio-card .wp-block-cover__image-background,
+	#portfolio-grid .portfolio-card__link {
+		transition: none;
+	}
+
+	.single-portfolio .wp-block-post-content > h2 + p:hover,
+	.single-portfolio .wp-block-post-content > h2 + ul:hover,
+	.single-portfolio .portfolio-case-study-actions .wp-block-button__link:hover {
+		transform: none;
+	}
+
+	#portfolio-grid .portfolio-card:hover .wp-block-cover__image-background,
+	#portfolio-grid .portfolio-card__link:hover {
+		transform: none;
+	}
+}
+
+/* About and contact page rebuild */
+.about-rebuild,
+.contact-rebuild {
+	overflow: clip;
+}
+
+.about-rebuild .about-eyebrow,
+.contact-rebuild .contact-eyebrow {
+	margin-bottom: 0.75rem;
+	color: var(--color-accent);
+	font-size: 0.78rem;
+	font-weight: 800;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+}
+
+.about-rebuild h1,
+.about-rebuild h2,
+.contact-rebuild h1,
+.contact-rebuild h2 {
+	hyphens: none;
+	overflow-wrap: normal;
+}
+
+.about-availability-card,
+.about-info-card,
+.about-experience-card,
+.about-process > .wp-block-column,
+.contact-form-card,
+.contact-details-card {
+	box-sizing: border-box;
+	height: 100%;
+	padding: clamp(1.25rem, 3vw, 2rem);
+	border: 1px solid rgba(255, 255, 255, 0.16);
+	border-radius: 18px;
+	background: linear-gradient(135deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.045));
+	box-shadow: 0 18px 45px rgba(0, 0, 0, 0.15);
+}
+
+.about-status {
+	color: #9ff0bb;
+	font-size: 0.78rem;
+	font-weight: 800;
+	letter-spacing: 0.08em;
+}
+
+.about-card-grid,
+.about-process {
+	align-items: stretch;
+}
+
+.about-card-number {
+	color: var(--color-accent);
+	font-size: 0.85rem;
+	font-weight: 800;
+}
+
+.about-section.has-tertiary-background-color h2,
+.about-section.has-tertiary-background-color h3,
+.about-section.has-tertiary-background-color p,
+.about-section.has-tertiary-background-color li,
+.about-ai-section p,
+.about-ai-section li {
+	color: #fff;
+}
+
+.about-section.has-tertiary-background-color .about-card-number,
+.about-ai-section h2 {
+	color: var(--color-accent);
+}
+
+.about-info-card,
+.about-experience-card {
+	transition: transform 180ms ease, border-color 180ms ease;
+}
+
+.about-info-card:hover,
+.about-experience-card:hover {
+	transform: translateY(-4px);
+	border-color: var(--color-accent);
+}
+
+.about-experience-stack {
+	display: grid;
+	gap: 1.25rem;
+}
+
+.about-experience-card.is-current {
+	border-color: rgba(255, 204, 0, 0.72);
+	background: linear-gradient(135deg, rgba(255, 204, 0, 0.13), rgba(255, 255, 255, 0.05));
+}
+
+.about-current-label {
+	margin-bottom: 0.5rem;
+	color: var(--color-accent);
+	font-size: 0.76rem;
+	font-weight: 800;
+	letter-spacing: 0.1em;
+}
+
+.about-ai-section .spc-qa-shell {
+	margin-top: 1.5rem;
+}
+
+.about-final-cta .wp-block-buttons {
+	margin-top: 1.5rem;
+}
+
+.contact-rebuild .contact-intro {
+	max-width: 760px;
+	margin-bottom: clamp(2rem, 5vw, 4rem);
+}
+
+.contact-form-card .wpforms-container {
+	margin-bottom: 0;
+}
+
+.contact-form-card .wpforms-field-label {
+	color: #fff !important;
+}
+
+.contact-form-card input,
+.contact-form-card textarea,
+.contact-form-card select {
+	box-sizing: border-box !important;
+	border-radius: 10px !important;
+}
+
+.contact-form-card .wpforms-submit {
+	border-radius: 999px !important;
+	background: var(--color-accent) !important;
+	color: #111 !important;
+	font-weight: 800 !important;
+}
+
+.contact-details-card a {
+	color: var(--color-accent);
+}
+
+.contact-detail-label {
+	margin-bottom: 0.25rem;
+	color: rgba(255, 255, 255, 0.68);
+	font-size: 0.8rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.contact-privacy {
+	margin-top: 1rem;
+	color: rgba(255, 255, 255, 0.72);
+	font-size: 0.88rem;
+}
+
+.contact-work-cta {
+	text-align: center;
+}
+
+.about-hero .about-brand-banner {
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto clamp(1.75rem, 4vw, 3rem);
+}
+
+.about-hero .about-brand-banner img {
+	display: block;
+	width: 100%;
+	height: auto;
+	border: 1px solid rgba(255, 255, 255, 0.16);
+	border-radius: clamp(16px, 2vw, 24px);
+	box-shadow: 0 24px 60px rgba(9, 25, 31, 0.3);
+}
+
+/* Full-bleed About banner and consistent page context navigation */
+.about-hero .about-brand-banner {
+	width: 100vw !important;
+	max-width: none !important;
+	margin-right: calc(50% - 50vw) !important;
+	margin-left: calc(50% - 50vw) !important;
+}
+
+.about-hero .about-brand-banner img {
+	border-right: 0;
+	border-left: 0;
+	border-radius: 0;
+}
+
+.page-context-bar {
+	box-sizing: border-box;
+	padding: 0.8rem max(var(--wp--custom--spacing--outer), calc((100vw - 1200px) / 2));
+	border-top: 1px solid rgba(63, 87, 98, 0.08);
+	border-bottom: 1px solid rgba(63, 87, 98, 0.14);
+	background: #f1f5f6;
+	color: #3f5762;
+}
+
+.page-context-bar__inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+}
+
+.page-context-bar__trail,
+.page-context-bar__title {
+	margin: 0;
+}
+
+.page-context-bar__trail {
+	display: flex;
+	align-items: center;
+	gap: 0.55rem;
+	font-size: 0.82rem;
+	font-weight: 650;
+}
+
+.page-context-bar__trail a {
+	color: #3f5762;
+	text-decoration: none;
+}
+
+.page-context-bar__trail a:hover,
+.page-context-bar__trail a:focus-visible {
+	color: #b18400;
+	text-decoration: underline;
+}
+
+.page-context-bar__separator {
+	color: #b18400;
+}
+
+.page-context-bar__title {
+	font-family: var(--wp--preset--font-family--manrope), Arial, sans-serif;
+	font-size: clamp(1rem, 2vw, 1.25rem);
+	font-weight: 750;
+	letter-spacing: -0.02em;
+}
+
+/* Interactive, equal-height About process cards */
+.about-process {
+	display: grid !important;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: clamp(1rem, 2.4vw, 1.5rem);
+}
+
+.about-process > .wp-block-column {
+	position: relative;
+	display: flex;
+	min-width: 0;
+	height: 215px;
+	min-height: 215px;
+	padding: clamp(1.35rem, 2.5vw, 1.85rem);
+	overflow: hidden;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	border-radius: 20px;
+	box-shadow: 0 18px 40px rgba(9, 25, 31, 0.18);
+	isolation: isolate;
+	transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.about-process > .wp-block-column:nth-child(1) {
+	background: linear-gradient(145deg, #183f49, #245966);
+}
+
+.about-process > .wp-block-column:nth-child(2) {
+	background: linear-gradient(145deg, #375342, #4f7358);
+}
+
+.about-process > .wp-block-column:nth-child(3) {
+	background: linear-gradient(145deg, #67501f, #927128);
+}
+
+.about-process > .wp-block-column:nth-child(4) {
+	background: linear-gradient(145deg, #493d67, #65548b);
+}
+
+.about-process > .wp-block-column::after {
+	position: absolute;
+	right: -2.25rem;
+	bottom: -2.75rem;
+	width: 8rem;
+	height: 8rem;
+	border: 1px solid rgba(255, 255, 255, 0.16);
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.08);
+	content: "";
+	z-index: -1;
+	transition: transform 300ms ease, background-color 300ms ease;
+}
+
+.about-process > .wp-block-column:hover,
+.about-process > .wp-block-column:focus-within {
+	transform: translateY(-7px);
+	border-color: var(--color-accent);
+	box-shadow: 0 26px 52px rgba(9, 25, 31, 0.3);
+}
+
+.about-process > .wp-block-column:hover::after,
+.about-process > .wp-block-column:focus-within::after {
+	transform: scale(1.3) translate(-0.4rem, -0.35rem);
+	background: rgba(255, 204, 0, 0.15);
+}
+
+.about-process > .wp-block-column p {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	margin: 0;
+	color: rgba(255, 255, 255, 0.86) !important;
+	line-height: 1.55;
+}
+
+.about-process > .wp-block-column strong {
+	display: block;
+	margin-bottom: auto;
+	padding-bottom: 1.3rem;
+	color: #fff;
+	font-family: var(--wp--preset--font-family--manrope), Arial, sans-serif;
+	font-size: clamp(1.12rem, 2vw, 1.35rem);
+	line-height: 1.2;
+}
+
+.about-process > .wp-block-column strong::first-letter {
+	color: var(--color-accent);
+}
+
+@media (max-width: 782px) {
+	.page-context-bar {
+		padding: 0.75rem 1.25rem;
+	}
+
+	.page-context-bar__inner {
+		align-items: flex-start;
+		flex-direction: column-reverse;
+		gap: 0.35rem;
+	}
+
+	.about-process {
+		grid-template-columns: 1fr;
+	}
+
+	.about-process > .wp-block-column {
+		height: 170px;
+		min-height: 170px;
+	}
+
+	.about-hero .wp-block-columns,
+	.about-card-grid,
+	.about-process,
+	.contact-rebuild .wp-block-columns {
+		gap: 1rem;
+	}
+
+	.about-availability-card,
+	.about-info-card,
+	.about-experience-card,
+	.about-process > .wp-block-column,
+	.contact-form-card,
+	.contact-details-card {
+		padding: 1.25rem;
+	}
+
+	.about-rebuild .wp-block-buttons,
+	.contact-rebuild .wp-block-buttons {
+		align-items: stretch;
+	}
+
+	.about-rebuild .wp-block-button,
+	.about-rebuild .wp-block-button__link,
+	.contact-rebuild .wp-block-button,
+	.contact-rebuild .wp-block-button__link {
+		width: 100%;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.about-info-card,
+	.about-experience-card,
+	.about-process > .wp-block-column,
+	.about-process > .wp-block-column::after {
+		transition: none;
+	}
+
+	.about-info-card:hover,
+	.about-experience-card:hover,
+	.about-process > .wp-block-column:hover,
+	.about-process > .wp-block-column:focus-within,
+	.about-process > .wp-block-column:hover::after,
+	.about-process > .wp-block-column:focus-within::after {
+		transform: none;
+	}
+}
+
+/* Compact About hero after the full-bleed banner treatment. */
+.about-hero {
+	padding-top: 0 !important;
+	padding-bottom: clamp(3rem, 5vw, 4rem) !important;
+}
+
+.about-hero .about-brand-banner {
+	width: min(100%, 1000px) !important;
+	max-width: 1000px !important;
+	margin: 0 auto clamp(2rem, 4vw, 2.5rem) !important;
+}
+
+.about-hero .about-brand-banner img {
+	height: auto;
+	object-fit: contain;
+	object-position: center;
+}
+
+.about-hero > .wp-block-columns {
+	margin-top: 0;
+}
+
+@media (max-width: 782px) {
+	.about-hero {
+		padding-top: 0 !important;
+		padding-bottom: 2.5rem !important;
+	}
+
+	.about-hero .about-brand-banner {
+		width: 100% !important;
+		margin-bottom: 1.75rem !important;
+	}
+
+	.about-hero .about-brand-banner img {
+		height: auto;
+	}
+}
+
+/* Keep the Recent Experience introduction visible beside the first role card. */
+.about-section:has(.about-experience-stack) > .wp-block-columns {
+	align-items: flex-start;
+}
+
+.about-section:has(.about-experience-stack) .is-vertically-aligned-center {
+	align-self: flex-start;
+}
+
+/* Keep the Recent Experience introduction in view while its role cards scroll. */
+@media (min-width: 783px) {
+	.about-section:has(.about-experience-stack) > .wp-block-columns > .wp-block-column:first-child {
+		position: sticky;
+		top: 1.5rem;
+		align-self: flex-start;
+	}
+}
+
+/* Compact the Portfolio introduction so the work appears sooner. */
+.page-id-25 #about {
+	padding-top: clamp(2rem, 4vw, 3.5rem) !important;
+	padding-bottom: clamp(2.5rem, 5vw, 4rem) !important;
+}
+
+.page-id-25 #about > p {
+	margin-top: 1rem !important;
+	margin-bottom: 0 !important;
+}
+
+/* Responsive panoramic About banner. */
+.about-hero .about-brand-banner {
+	width: 100vw !important;
+	max-width: none !important;
+	margin: 0 calc(50% - 50vw) clamp(2rem, 4vw, 2.5rem) !important;
+}
+
+.about-hero .about-brand-banner img {
+	display: block;
+	width: 100%;
+	height: auto;
+	max-height: none;
+	object-fit: contain;
+	object-position: center;
+}
+
+@media (max-width: 782px) {
+	.about-hero .about-brand-banner {
+		width: 100vw !important;
+		max-width: none !important;
+		margin-right: calc(50% - 50vw) !important;
+		margin-left: calc(50% - 50vw) !important;
 	}
 }

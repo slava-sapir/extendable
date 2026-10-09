@@ -63,7 +63,7 @@ if ( ! function_exists( 'extendable_styles' ) ) :
 			'extendable-style',
 			get_template_directory_uri() . '/style.css',
 			array(),
-			EXTENDABLE_THEME_VERSION
+			(string) filemtime( get_template_directory() . '/style.css' )
 		);
 
 		// Enqueue theme stylesheet.
@@ -247,11 +247,11 @@ add_action('init', 'register_portfolio_cpt');
  * @return int[]
  */
 function extendable_public_portfolio_ids() {
-    return array( 112, 199, 113, 197, 193, 143, 864 );
+    return array( 112, 199, 113, 197, 193, 143, 114, 864 );
 }
 
 function render_portfolio_shortcode() {
-    $posts_per_page = 2;
+    $posts_per_page = 4;
 
     $query = new WP_Query( array(
         'post_type'      => 'portfolio',
@@ -277,7 +277,7 @@ function render_portfolio_shortcode() {
 
     <?php if ( $query->max_num_pages > 1 ) : ?>
         <div style="text-align:center; margin-top:20px;">
-            <button id="load-more-portfolio" class="wp-block-button__link" type="button">Load More</button>
+            <button id="load-more-portfolio" class="wp-block-button__link" type="button">Load 2 more projects</button>
         </div>
     <?php endif; ?>
 
@@ -288,7 +288,7 @@ function render_portfolio_shortcode() {
 
         if (!portfolioGrid || !loadMoreButton) return;
 
-        let currentPage = 3;
+        let currentOffset = 4;
 
         const spinner = document.createElement('div');
         spinner.id = 'portfolio-spinner';
@@ -302,7 +302,7 @@ function render_portfolio_shortcode() {
             spinner.style.display = 'block';
             loadMoreButton.disabled = true;
 
-            fetch(`<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>?action=load_more_portfolio&page=${currentPage}&is_portfolio=1`)
+            fetch(`<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>?action=load_more_portfolio&offset=${currentOffset}&is_portfolio=1`)
                 .then(response => response.json())
                 .then(result => {
                     spinner.style.display = 'none';
@@ -316,7 +316,7 @@ function render_portfolio_shortcode() {
                         spinner.remove();
                     } else {
                         loadMoreButton.disabled = false;
-                        currentPage++;
+                        currentOffset += result.data.loaded;
                     }
                 })
                 .catch(error => {
@@ -336,8 +336,8 @@ add_shortcode( 'portfolio_grid', 'render_portfolio_shortcode' );
 
 
 function load_more_portfolio_ajax() {
-    $paged = isset( $_GET['page'] ) ? max( 1, intval( $_GET['page'] ) ) : 1;
-    $posts_per_page = 1;
+    $offset = isset( $_GET['offset'] ) ? max( 0, intval( $_GET['offset'] ) ) : 4;
+    $posts_per_page = 2;
 
     $query = new WP_Query( array(
         'post_type'      => 'portfolio',
@@ -345,7 +345,7 @@ function load_more_portfolio_ajax() {
         'post__in'       => extendable_public_portfolio_ids(),
         'orderby'        => 'post__in',
         'posts_per_page' => $posts_per_page,
-        'paged'          => $paged,
+        'offset'         => $offset,
     ) );
 
     ob_start();
@@ -360,11 +360,13 @@ function load_more_portfolio_ajax() {
     $html = ob_get_clean();
     wp_reset_postdata();
 
-    $is_last = $paged >= $query->max_num_pages;
+    $loaded  = $query->post_count;
+    $is_last = ( $offset + $loaded ) >= count( extendable_public_portfolio_ids() );
 
     wp_send_json_success( array(
         'html' => $html,
         'done' => $is_last,
+        'loaded' => $loaded,
     ) );
 }
 add_action( 'wp_ajax_load_more_portfolio', 'load_more_portfolio_ajax' );
@@ -405,6 +407,56 @@ function portfolio_save_meta_box_data($post_id) {
 }
 add_action('save_post', 'portfolio_save_meta_box_data');
 
+/**
+ * Display the external project URL on individual portfolio case studies.
+ *
+ * Portfolio cards link to the internal case study first; this shortcode keeps
+ * the live website available as a separate, clearly labelled action.
+ */
+function extendable_portfolio_live_site_shortcode() {
+    if ( ! is_singular( 'portfolio' ) ) {
+        return '';
+    }
+
+    $url = get_post_meta( get_the_ID(), '_portfolio_external_link', true );
+
+    if ( ! $url ) {
+        return '';
+    }
+
+    return sprintf(
+        '<div class="wp-block-buttons portfolio-case-study-actions"><div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="%1$s" target="_blank" rel="noopener noreferrer">Visit Live Website</a></div><div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="%2$s">View All Projects</a></div></div>',
+        esc_url( $url ),
+        esc_url( home_url( '/portfolio/' ) )
+    );
+}
+add_shortcode( 'portfolio_live_site', 'extendable_portfolio_live_site_shortcode' );
+
+/**
+ * Keep portfolio case-study titles as headings instead of self-links.
+ */
+function extendable_unlink_portfolio_post_title( $block_content ) {
+    if ( ! is_singular( 'portfolio' ) ) {
+        return $block_content;
+    }
+
+    return preg_replace( '#<a\b[^>]*>(.*?)</a>#is', '$1', $block_content );
+}
+add_filter( 'render_block_core/post-title', 'extendable_unlink_portfolio_post_title' );
+
+/**
+ * Keep the featured image on portfolio case studies from linking back to the
+ * page that is already being viewed.
+ */
+function extendable_unlink_portfolio_featured_image( $block_content ) {
+    if ( ! is_singular( 'portfolio' ) ) {
+        return $block_content;
+    }
+
+    return preg_replace( '#<a\b[^>]*>(.*?)</a>#is', '$1', $block_content );
+}
+add_filter( 'render_block_core/post-featured-image', 'extendable_unlink_portfolio_featured_image' );
+
 
 /**
  * This function is hooked into the_content to highlight my tech stack terms I used in specific projects
@@ -412,7 +464,7 @@ add_action('save_post', 'portfolio_save_meta_box_data');
  * Scoped to context, accessible, and easily configurable.
  */
 function highlight_keywords_in_content( $content ) {
-  $is_portfolio_page = is_page( array( 'portfolio', 'about' ) );
+  $is_portfolio_page = is_page( array( 'portfolio', 'about' ) ) || is_singular( 'portfolio' );
 
   $is_ajax_portfolio = defined( 'DOING_AJAX' ) && DOING_AJAX
     && isset( $_GET['is_portfolio'] ) && intval( $_GET['is_portfolio'] ) === 1;
@@ -425,14 +477,40 @@ function highlight_keywords_in_content( $content ) {
     'Java Spring Boot','TypeScript','JavaScript','Node.js','MongoDB', 'Custom Post Types',
     'React','Tailwind','Bootstrap','WordPress','REST API','API', 'taxonomies',
     'CI/CD','Git','AWS','JQuery','Context','custom CSS', 'CSS', 'ACF', 'Next.js 15', 
-	'Vercel AI SDK', 'PostgreSQL (Neon)', 'OpenAI (GPT-4 Turbo)'
+	'Vercel AI SDK', 'PostgreSQL (Neon)', 'OpenAI (GPT-4 Turbo)',
+	'PageSpeed Insights', 'Screaming Frog', 'Google Search Console', 'GA4',
+	'Google Tag Manager', 'Slack', 'Notion', 'Figma'
   );
 
   usort( $keywords, function( $a, $b ) { return mb_strlen( $b ) - mb_strlen( $a ); } );
   $quoted  = array_map( function( $w ) { return preg_quote( $w, '/' ); }, $keywords );
   $pattern = '/(?<![A-Za-z0-9+#.\-])(' . implode( '|', $quoted ) . ')(?![A-Za-z0-9+#.\-])/i';
   $replacement = '<span class="highlight-word">$1</span>';
-  $content = preg_replace( $pattern, $replacement, $content );
+
+  // Only highlight visible text. Running the replacement against the complete
+  // HTML string can inject markup into attributes such as image alt text and
+  // link URLs, producing invalid HTML on the front end.
+  $segments = preg_split( '/(<[^>]+>)/', $content, -1, PREG_SPLIT_DELIM_CAPTURE );
+  $skip_text = false;
+
+  foreach ( $segments as &$segment ) {
+    if ( isset( $segment[0] ) && '<' === $segment[0] ) {
+      if ( preg_match( '#^<(script|style|code|pre)\b#i', $segment ) ) {
+        $skip_text = true;
+      } elseif ( preg_match( '#^</(script|style|code|pre)\s*>#i', $segment ) ) {
+        $skip_text = false;
+      }
+
+      continue;
+    }
+
+    if ( ! $skip_text ) {
+      $segment = preg_replace( $pattern, $replacement, $segment );
+    }
+  }
+  unset( $segment );
+
+  $content = implode( '', $segments );
 
   return $content;
 }
