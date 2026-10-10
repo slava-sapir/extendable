@@ -102,6 +102,30 @@ nav .wp-block-pages-list__item.wp-block-navigation-item.menu-item-home {
 	padding-left: var(--wp--custom--spacing--outer);
 }
 
+/* Give the mobile overlay comfortable edges and easier tap targets. */
+.wp-block-navigation .wp-block-navigation__responsive-container.is-menu-open {
+	padding: 1.5rem 1.5rem 2.5rem !important;
+}
+
+.wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__container {
+	row-gap: 0.35rem;
+}
+
+.wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item__content {
+	min-height: 2.75rem;
+	padding: 0.65rem 0.9rem;
+	border-radius: 0.5rem;
+	display: flex;
+	align-items: center;
+	transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item__content:hover,
+.wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item__content:focus-visible {
+	background-color: rgba(68, 91, 103, 0.09);
+	color: #334a56;
+}
+
 /*
  * --------------------------------------------------------
  *  Custom - blocks
