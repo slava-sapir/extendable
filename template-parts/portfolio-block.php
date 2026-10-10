@@ -6,9 +6,16 @@ $summary_source    = wp_strip_all_tags( strip_shortcodes( get_the_content() ) );
 $summary_parts     = preg_split( '/\b(?:Project Overview|Overview|The Challenge)\b/i', $summary_source );
 $summary           = wp_trim_words( trim( $summary_parts[0] ?? $summary_source ), 30, '&hellip;' );
 $project_title     = get_the_title();
-$project_type      = ( false !== stripos( $project_title, 'Netflix' ) || false !== stripos( $project_title, 'Flash Cards' ) )
-	? 'Independent Project'
-	: 'Production Website';
+$saved_project_type = get_post_meta( get_the_ID(), '_portfolio_project_type', true );
+$allowed_project_types = array( 'Production Website', 'Independent Project' );
+
+if ( in_array( $saved_project_type, $allowed_project_types, true ) ) {
+	$project_type = $saved_project_type;
+} else {
+	$project_type = ( false !== stripos( $project_title, 'Netflix' ) || false !== stripos( $project_title, 'Flash Cards' ) )
+		? 'Independent Project'
+		: 'Production Website';
+}
 $technology_terms  = array(
 	'WordPress'    => 'WordPress',
 	'WooCommerce'  => 'WooCommerce',
@@ -16,6 +23,7 @@ $technology_terms  = array(
 	'Gutenberg'    => 'Gutenberg',
 	'Next.js'      => 'Next.js',
 	'React'        => 'React',
+	'Supabase'     => 'Supabase',
 	'TypeScript'   => 'TypeScript',
 	'JavaScript'   => 'JavaScript',
 	'Tailwind'     => 'Tailwind CSS',

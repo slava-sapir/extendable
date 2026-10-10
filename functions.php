@@ -386,9 +386,17 @@ function portfolio_add_meta_box() {
 add_action('add_meta_boxes', 'portfolio_add_meta_box');
 function portfolio_external_link_callback($post) {
 	wp_nonce_field('portfolio_save_meta_box_data', 'portfolio_meta_box_nonce');
-	$value = get_post_meta($post->ID, '_portfolio_external_link', true);
+	$value        = get_post_meta($post->ID, '_portfolio_external_link', true);
+	$project_type = get_post_meta($post->ID, '_portfolio_project_type', true);
+
 	echo '<label for="portfolio_external_link">URL</label>';
 	echo '<input type="url" id="portfolio_external_link" name="portfolio_external_link" value="' . esc_attr($value) . '" style="width:100%;" />';
+	echo '<p><label for="portfolio_project_type">Project Type</label></p>';
+	echo '<select id="portfolio_project_type" name="portfolio_project_type" style="width:100%;">';
+	echo '<option value="">Use automatic fallback</option>';
+	echo '<option value="Production Website" ' . selected($project_type, 'Production Website', false) . '>Production Website</option>';
+	echo '<option value="Independent Project" ' . selected($project_type, 'Independent Project', false) . '>Independent Project</option>';
+	echo '</select>';
 }
 
 function portfolio_save_meta_box_data($post_id) {
@@ -403,6 +411,17 @@ function portfolio_save_meta_box_data($post_id) {
 
 	if (isset($_POST['portfolio_external_link'])) {
 		update_post_meta($post_id, '_portfolio_external_link', sanitize_text_field($_POST['portfolio_external_link']));
+	}
+
+	if (isset($_POST['portfolio_project_type'])) {
+		$project_type = sanitize_text_field(wp_unslash($_POST['portfolio_project_type']));
+		$allowed_types = array('Production Website', 'Independent Project');
+
+		if (in_array($project_type, $allowed_types, true)) {
+			update_post_meta($post_id, '_portfolio_project_type', $project_type);
+		} else {
+			delete_post_meta($post_id, '_portfolio_project_type');
+		}
 	}
 }
 add_action('save_post', 'portfolio_save_meta_box_data');
