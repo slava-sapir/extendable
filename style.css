@@ -112,6 +112,7 @@ nav .wp-block-pages-list__item.wp-block-navigation-item.menu-item-home {
 }
 
 .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-content .wp-block-navigation-item__content {
+	box-sizing: border-box;
 	min-height: 2.75rem;
 	padding: 0.65rem 0.9rem;
 	border-radius: 0.5rem;
