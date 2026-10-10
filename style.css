@@ -111,7 +111,7 @@ nav .wp-block-pages-list__item.wp-block-navigation-item.menu-item-home {
 	row-gap: 0.35rem;
 }
 
-.wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item__content {
+.wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-content .wp-block-navigation-item__content {
 	min-height: 2.75rem;
 	padding: 0.65rem 0.9rem;
 	border-radius: 0.5rem;
@@ -120,8 +120,8 @@ nav .wp-block-pages-list__item.wp-block-navigation-item.menu-item-home {
 	transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item__content:hover,
-.wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item__content:focus-visible {
+.wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-content .wp-block-navigation-item__content:hover,
+.wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-content .wp-block-navigation-item__content:focus-visible {
 	background-color: rgba(68, 91, 103, 0.09);
 	color: #334a56;
 }
